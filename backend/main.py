@@ -10,3 +10,18 @@ app = FastAPI(
     description="A hands-on demonstration of CSRF and XSS vulnerabilities and their mitigations.",
     version="1.0.0",
 )
+
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.session_secret,
+    same_site="lax",
+    https_only=False,
+)
+
+
+
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+app.include_router(comments.router, prefix="/api/comments", tags=["comments"])
+app.include_router(csrf_demo.router, prefix="/api/csrf", tags=["csrf"])
+app.include_router(xss_demo.router, prefix="/api/xss", tags=["xss"])
+
