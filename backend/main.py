@@ -18,10 +18,20 @@ app.add_middleware(
     https_only=False,
 )
 
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(comments.router, prefix="/api/comments", tags=["comments"])
 app.include_router(csrf_demo.router, prefix="/api/csrf", tags=["csrf"])
 app.include_router(xss_demo.router, prefix="/api/xss", tags=["xss"])
 
+
+@app.get("/api/health")
+def health_check():
+    return {"status": "ok", "message": "Security Showcase API is running"}
